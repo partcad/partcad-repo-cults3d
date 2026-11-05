@@ -228,6 +228,12 @@ Not run, for want of a key:
   your own, two; a download, one more to the API. A `429` is waited out and
   retried, as `Retry-After` says.
 
+`pc login` was run against the live site in a real (headed) Chrome with
+PartCAD's extension: from where it was tested, cults3d.com put Cloudflare's
+"Verify you are human" in front of the API key page, which the extension's bar
+asks the person to confirm, and nothing else. The key page itself, and the nick
+and key pasted into the bar, were not seen live, for want of an account.
+
 ## Layout
 
 | Path | Purpose |
