@@ -55,8 +55,10 @@ the address is presentation - the same creation is under every language, and
 moves when its creator moves it to another category. A name is not case
 sensitive (Cults3D's slugs are lower case).
 
-Both parameters may be given, and must then agree. "Best" is by format, in this
-order, and among files of one format the first Cults3D lists:
+Both may be given, and must then agree; a third, `source`, and the plugin's
+own `formats` are under [Parameters](#parameters). "Best" is by format, in
+this order unless `formats` says otherwise, and among files of one format the
+first Cults3D lists:
 
 | Format | Read as PartCAD part type | Extensions |
 | --- | --- | --- |
@@ -179,6 +181,79 @@ pair; use them, or `pythonSandbox: venv`.
 - **What is inside a ZIP.** A creation uploaded as one ZIP is, to the API, one
   file called `<something>.zip`, and its members cannot be named without
   downloading it. It is not a part here; a search says so of it.
+
+## Parameters
+
+The plugin's parameters, declared in `partcad.yaml`, are a default for every
+Cults3D part:
+
+| Parameter | Default | What it is |
+| --- | --- | --- |
+| `formats` | all, in the order above | The formats to take a creation in, best first, separated by commas. A format left out is not taken - `stl,3mf` is meshes only - unless a part asks for it by its own `format` or `file`. |
+| `source` | `auto` | Which of a creation's files: Cults3D has no preview meshes of its own, so `auto` and `original` are the same here and `preview` finds nothing. |
+| `nick` | empty | Your account's nick, the name its profile is under. `CULTS3D_NICK` gives it too. |
+| `api_key` | empty | An API key of that account, made at https://cults3d.com/en/api/keys (read-only is enough) - the only way in Cults3D's API has. `CULTS3D_API_KEY` gives it too. |
+
+They are yours to set without touching this package - every one of them, the
+credentials included, and the OAuth or API-key settings beside them:
+
+- in your own `~/.partcad/config.yaml`, by the plugin's name, which is where
+  `pc login` keeps the credentials:
+
+  ```yaml
+  parameters:
+    "//pub/universe/cults3d:cults3d_repo":
+      formats: stl,3mf
+  ```
+
+- or, for anything but the credentials, in a package of your own, as an enrich
+  of the plugin and a package it serves - `//cults3d_meshes:<creation>` in a
+  package at the root:
+
+  ```yaml
+  repositories:
+    meshes_repo:
+      type: enrich
+      source: //pub/universe/cults3d:cults3d_repo
+      with:
+        formats: stl,3mf
+  dependencies:
+    cults3d_meshes:
+      type: external
+      plugin: :meshes_repo
+  ```
+
+A part's own `file`, `format` and `source` override them for that part - in its
+name (`<slug>;format=stl`), or in the `with` of an enrich of the part:
+
+```yaml
+parts:
+  clip:
+    type: enrich
+    source: //pub/universe/cults3d/models:<slug>
+    with:
+      format: stl
+```
+
+PartCAD keys what it caches of this package on your overrides of the plugin's
+parameters, so a change to one - logging in, too - takes effect at once. An
+environment variable is not seen there: after setting one, `pc update`
+refreshes what was cached without it.
+
+## Logging in with nobody at the screen
+
+An AI agent, or a script, logs in without a browser:
+
+```shell
+pc login --agent //pub/universe/cults3d:cults3d_repo
+pc login --agent --set nick=... --set api_key=... //pub/universe/cults3d:cults3d_repo
+```
+
+The first prints what a person would do in the browser instead of opening one -
+where to sign in, what to copy, and the command that hands it over - and exits
+with status 3. It says where the API key is made, and what the nick is. The second hands over what the person found; the
+plugin checks it with Cults3D before PartCAD keeps it. `pc mcp`'s `login`
+tool works the same way.
 
 ## Status
 

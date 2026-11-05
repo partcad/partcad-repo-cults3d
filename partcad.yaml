@@ -46,21 +46,81 @@ repositories:
     type: basic
     path: cults3d_repo.py
     desc: Serves your Cults3D creations as parts, and searches Cults3D.
+    # Every parameter here is a default for every Cults3D part, and yours
+    # to change without touching this package, two ways:
+    #
+    # - in your own ~/.partcad/config.yaml, under 'parameters', by the
+    #   plugin's name - which is also where 'pc login' keeps these two:
+    #
+    #     parameters:
+    #       //pub/universe/cults3d:cults3d_repo:
+    #         formats: stl,3mf
+    #
+    # - or in a package of your own, as an enrich of the plugin and a package
+    #   it serves, whose parts are then yours to name - '//cults3d_meshes:<creation>'
+    #   in a package at the root (never with credentials: those are yours,
+    #   not a package's):
+    #
+    #     repositories:
+    #       meshes_repo:
+    #         type: enrich
+    #         source: //pub/universe/cults3d:cults3d_repo
+    #         with:
+    #           formats: stl,3mf
+    #     dependencies:
+    #       cults3d_meshes:
+    #         type: external
+    #         plugin: :meshes_repo
+    #
+    # A part's own parameters override these for that part. Every part takes
+    # 'file' (one of the creation's files, by name ('<name>#2' for the second
+    # of that name)), 'format' (its best file of that format: step, brep, 3mf,
+    # stl, obj, glb or scad) and 'source' (as below) - in its name, '<your
+    # creation's slug>;format=stl', or in the 'with' of an enrich of the part:
+    #
+    #     parts:
+    #       clip:
+    #         type: enrich
+    #         source: //pub/universe/cults3d/models:<your creation's slug>
+    #         with:
+    #           format: stl
     parameters:
-      # Empty here, and meant to stay so. A credential is the user's own, and
-      # is set where only they see it: 'pc login' writes these two into the
-      # user's own ~/.partcad/config.yaml. The plugin reads the environment
-      # when they are not set.
+      formats:
+        type: string
+        default: ""
+        desc: >-
+          The formats to take a creation in, best first, separated by commas:
+          step, brep, 3mf, stl, obj, glb, scad. A format left out is not taken
+          - 'stl,3mf' is meshes only - unless a part asks for it by its own
+          'format' or 'file'. Empty is all of them, in that order.
+      source:
+        type: string
+        default: auto
+        enum: [auto, original, preview]
+        desc: >-
+          Which of a creation's files. Cults3D has no preview meshes of its
+          own: every file is the designer's, so 'auto' and 'original' are the
+          same here, and 'preview' finds nothing.
+      # Empty here, and meant to stay so: a credential is the user's own, and
+      # is set where only they see it.
       nick:
         type: string
         default: ""
         desc: >-
-          The nick of your Cults3D account - the name your profile is under, not
-          your e-mail address. Set by 'pc login'; or CULTS3D_NICK.
+          The nick of your Cults3D account - the name your profile is under,
+          not your e-mail address. Cults3D's API signs in with it and an API
+          key, the only way it has. 'pc login
+          //pub/universe/cults3d:cults3d_repo' asks for both, checks them, and
+          keeps them in your ~/.partcad/config.yaml, under 'parameters' as
+          above; 'pc login --agent' says where to find them, and takes them
+          back with '--set nick=... --set api_key=...'. CULTS3D_NICK gives it
+          too, where the plugin's sandbox sees the environment (a container
+          does not).
       api_key:
         type: string
         default: ""
         desc: >-
-          An API key of that account, made at https://cults3d.com/en/api/keys (a
-          read-only one is enough). Set by 'pc login'; or CULTS3D_API_KEY. Never
-          in a package.
+          An API key of that account, made at https://cults3d.com/en/api/keys
+          (a read-only one is enough), kept as 'nick' is; CULTS3D_API_KEY gives
+          it too. The API hands over the files of the account's own creations
+          only. Never set it in a package.

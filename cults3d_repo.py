@@ -42,7 +42,9 @@ import urllib.parse
 #
 # v1: the creations of the signed-in account as parts, one per file; the rest
 # found by search and not served.
-CACHE_VERSION = 1
+# v2: a part's 'source' parameter, and the plugin's 'formats' and 'source' preferences;
+#     'login' says what to do with nobody at the screen.
+CACHE_VERSION = 2
 
 
 def _shared():
@@ -161,6 +163,11 @@ class Cults3D(rm.Site):
         "Nothing is listed; search instead."
     )
     VERSION = CACHE_VERSION
+    LOGIN_INSTRUCTIONS = (
+        "Cults3D's API signs in with the account's nick - the name its profile is under, not its e-mail address - and "
+        "an API key, made at https://cults3d.com/en/api/keys while signed in (a read-only one is enough). It hands "
+        "over the files of the account's own creations only."
+    )
     CREDENTIALS = {"nick": "CULTS3D_NICK", "api_key": "CULTS3D_API_KEY"}
 
     def __init__(self, request=None):
@@ -248,7 +255,7 @@ class Cults3D(rm.Site):
             creation.files = self._blueprints(slug)
         return creation
 
-    def choose(self, model, wanted_file=None, wanted_format=None):
+    def choose(self, model, wanted_file=None, wanted_format=None, wanted_source=None):
         if not model.files and not model.mine:
             raise rm.NotFound(
                 "cults3d: %s is %s's creation, and Cults3D's API gives a creation's files to its creator only. "
@@ -260,7 +267,7 @@ class Cults3D(rm.Site):
                     " (%s)" % model.price if model.price else "",
                 )
             )
-        return super().choose(model, wanted_file, wanted_format)
+        return super().choose(model, wanted_file, wanted_format, wanted_source)
 
     def download(self, model, file):
         # Asked again rather than read out of the cache: the address may be a
