@@ -1,0 +1,66 @@
+# PartCAD package: Cults3D creations as parts, served by a repository plugin.
+#
+# Published as //pub/universe/cults3d/models: this package is
+# //pub/universe/cults3d, and its one external dependency 'models' is served by
+# the cults3d_repo plugin. Nothing is listed - a model site's catalog is not
+# something to enumerate - so a part is asked for by name, and found with
+# 'pc search parts' (see the README).
+name: //pub/universe/cults3d
+
+desc: |
+  Creations on Cults3D (https://cults3d.com) as PartCAD parts, by the
+  creation's slug. Cults3D's API gives a creation's files to its creator only,
+  so your own creations are parts, a part per file, and everyone else's are
+  found by 'pc search parts' with where to get them. Every question needs your
+  Cults3D nick and an API key: 'pc login //pub/universe/cults3d:cults3d_repo'.
+  No geometry is vendored; every file is fetched from Cults3D when it is first
+  built.
+url: https://cults3d.com/
+
+# The first PartCAD with 'pc login', which is how the plugin is given the nick
+# and API key every one of its questions to Cults3D needs.
+partcad: ">=0.9.3"
+
+# An upload to a model site says nothing about whether, or how, it is made to
+# be manufactured. The plugin says the same of 'models' in its metadata.
+manufacturable: false
+
+docs:
+  name: Cults3D for PartCAD
+  usage: |
+    ```shell
+    pc login //pub/universe/cults3d:cults3d_repo
+    pc search parts -P //pub/universe/cults3d/models -k "cable clip"
+    pc inspect //pub/universe/cults3d/models:<your creation's slug>
+    pc inspect "//pub/universe/cults3d/models:<your creation's slug>;format=stl"
+    ```
+
+dependencies:
+  models:
+    type: external
+    plugin: :cults3d_repo
+    desc: Cults3D creations, a part per file of your own.
+
+repositories:
+  cults3d_repo:
+    type: basic
+    path: cults3d_repo.py
+    desc: Serves your Cults3D creations as parts, and searches Cults3D.
+    parameters:
+      # Empty here, and meant to stay so. A credential is the user's own, and
+      # is set where only they see it: 'pc login' writes these two into the
+      # user's own ~/.partcad/config.yaml. The plugin reads the environment
+      # when they are not set.
+      nick:
+        type: string
+        default: ""
+        desc: >-
+          The nick of your Cults3D account - the name your profile is under, not
+          your e-mail address. Set by 'pc login'; or CULTS3D_NICK.
+      api_key:
+        type: string
+        default: ""
+        desc: >-
+          An API key of that account, made at https://cults3d.com/en/api/keys (a
+          read-only one is enough). Set by 'pc login'; or CULTS3D_API_KEY. Never
+          in a package.
