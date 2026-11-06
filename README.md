@@ -32,7 +32,7 @@ part is built, and kept by PartCAD from then on.
 and so does the plugin of what it serves: an upload to a model site says
 nothing about whether, or how, it is made to be made.
 
-Requires PartCAD 0.9.3 or newer: the first release with `pc login`, which is how
+Requires PartCAD 0.9.4 or newer: the first release with `pc login`, which is how
 the plugin gets the key every question needs. Searching its own catalog
 (`searchKinds`) and resolving a parametrized name itself (`instanceKinds`) are
 described under "Repositories" in PartCAD's documentation.
