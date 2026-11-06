@@ -5,7 +5,7 @@
 #
 """A PartCAD 'basic' repository plugin that serves Cults3D creations as parts.
 
-Published as ``//pub/universe/cults3d/models``. Nothing is listed: a part is
+Published as ``//pub/collection/cults3d/models``. Nothing is listed: a part is
 asked for by the creation's slug (the last part of
 cults3d.com/<language>/3d-model/<category>/<slug>), and is one file of it.
 
@@ -16,7 +16,7 @@ cults3d.com/<language>/3d-model/<category>/<slug>), and is one file of it.
 Everything is asked of Cults3D's GraphQL API, which takes HTTP Basic: the
 account's nick and an API key made at https://cults3d.com/en/api/keys. There is
 no anonymous way in, so without them every question is answered with how to
-set them up ('pc login //pub/universe/cults3d:cults3d_repo').
+set them up ('pc login //pub/collection/cults3d:cults3d_repo').
 
 And the API gives a creation's files to its creator only: "The API will not
 give you access to the 3D files for other users", in Cults3D's own words. So
@@ -64,7 +64,7 @@ rm = _shared()
 WEB = "https://cults3d.com"
 API = WEB + "/graphql"
 KEYS_PAGE = WEB + "/en/api/keys"
-PACKAGE = "//pub/universe/cults3d"
+PACKAGE = "//pub/collection/cults3d"
 LOGIN = "pc login %s:cults3d_repo" % PACKAGE
 
 # What a slug is. Cults3D makes them out of a creation's name, in lower case.

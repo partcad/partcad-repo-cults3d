@@ -30,7 +30,7 @@ _SPEC.loader.exec_module(plugin)
 rm = plugin.rm
 
 API = "https://cults3d.com/graphql"
-LOGIN = "pc login //pub/universe/cults3d:cults3d_repo"
+LOGIN = "pc login //pub/collection/cults3d:cults3d_repo"
 NICK = "ann"
 KEY = "k3yK3yk3yK3yk3yK3yk3yK3y"
 CDN = "https://files.cults3d.com/uploaders/1/blueprint-file-en/"

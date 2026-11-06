@@ -1,18 +1,18 @@
 # PartCAD package: Cults3D creations as parts, served by a repository plugin.
 #
-# Published as //pub/universe/cults3d/models: this package is
-# //pub/universe/cults3d, and its one external dependency 'models' is served by
+# Published as //pub/collection/cults3d/models: this package is
+# //pub/collection/cults3d, and its one external dependency 'models' is served by
 # the cults3d_repo plugin. Nothing is listed - a model site's catalog is not
 # something to enumerate - so a part is asked for by name, and found with
 # 'pc search parts' (see the README).
-name: //pub/universe/cults3d
+name: //pub/collection/cults3d
 
 desc: |
   Creations on Cults3D (https://cults3d.com) as PartCAD parts, by the
   creation's slug. Cults3D's API gives a creation's files to its creator only,
   so your own creations are parts, a part per file, and everyone else's are
   found by 'pc search parts' with where to get them. Every question needs your
-  Cults3D nick and an API key: 'pc login //pub/universe/cults3d:cults3d_repo'.
+  Cults3D nick and an API key: 'pc login //pub/collection/cults3d:cults3d_repo'.
   No geometry is vendored; every file is fetched from Cults3D when it is first
   built.
 url: https://cults3d.com/
@@ -29,10 +29,10 @@ docs:
   name: Cults3D for PartCAD
   usage: |
     ```shell
-    pc login //pub/universe/cults3d:cults3d_repo
-    pc search parts -P //pub/universe/cults3d/models -k "cable clip"
-    pc inspect //pub/universe/cults3d/models:<your creation's slug>
-    pc inspect "//pub/universe/cults3d/models:<your creation's slug>;format=stl"
+    pc login //pub/collection/cults3d:cults3d_repo
+    pc search parts -P //pub/collection/cults3d/models -k "cable clip"
+    pc inspect //pub/collection/cults3d/models:<your creation's slug>
+    pc inspect "//pub/collection/cults3d/models:<your creation's slug>;format=stl"
     ```
 
 dependencies:
@@ -53,7 +53,7 @@ repositories:
     #   plugin's name - which is also where 'pc login' keeps these two:
     #
     #     parameters:
-    #       //pub/universe/cults3d:cults3d_repo:
+    #       //pub/collection/cults3d:cults3d_repo:
     #         formats: stl,3mf
     #
     # - or in a package of your own, as an enrich of the plugin and a package
@@ -64,7 +64,7 @@ repositories:
     #     repositories:
     #       meshes_repo:
     #         type: enrich
-    #         source: //pub/universe/cults3d:cults3d_repo
+    #         source: //pub/collection/cults3d:cults3d_repo
     #         with:
     #           formats: stl,3mf
     #     dependencies:
@@ -81,7 +81,7 @@ repositories:
     #     parts:
     #       clip:
     #         type: enrich
-    #         source: //pub/universe/cults3d/models:<your creation's slug>
+    #         source: //pub/collection/cults3d/models:<your creation's slug>
     #         with:
     #           format: stl
     parameters:
@@ -110,7 +110,7 @@ repositories:
           The nick of your Cults3D account - the name your profile is under,
           not your e-mail address. Cults3D's API signs in with it and an API
           key, the only way it has. 'pc login
-          //pub/universe/cults3d:cults3d_repo' asks for both, checks them, and
+          //pub/collection/cults3d:cults3d_repo' asks for both, checks them, and
           keeps them in your ~/.partcad/config.yaml, under 'parameters' as
           above; 'pc login --agent' says where to find them, and takes them
           back with '--set nick=... --set api_key=...'. CULTS3D_NICK gives it

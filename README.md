@@ -1,7 +1,7 @@
 # Cults3D for PartCAD
 
 Serves Cults3D's creations as PartCAD parts, published as
-`//pub/universe/cults3d/models`.
+`//pub/collection/cults3d/models`.
 
 **Your own creations are parts; everyone else's are found.** Cults3D's API
 gives a creation's files to its creator only - "The API will not give you
@@ -14,9 +14,9 @@ it found and cannot serve.
 the plugin asks for nothing until it has your Cults3D nick and an API key:
 
 ```shell
-pc login //pub/universe/cults3d:cults3d_repo
-pc search parts -P //pub/universe/cults3d/models -k "cable clip"
-pc inspect "//pub/universe/cults3d/models:<your creation's slug>"
+pc login //pub/collection/cults3d:cults3d_repo
+pc search parts -P //pub/collection/cults3d/models -k "cable clip"
+pc inspect "//pub/collection/cults3d/models:<your creation's slug>"
 ```
 
 Without them, every name and every search is answered with that `pc login`
@@ -98,7 +98,7 @@ Cults3D's order: each by its slug, with who made it, what it costs and its
 address, as something found and not served, which PartCAD lists as such:
 
 ```text
-//pub/universe/cults3d/models benchy-boat    Benchy boat, by bob (4.20 EUR): Cults3D's API gives its files to its creator only; get it from Cults3D
+//pub/collection/cults3d/models benchy-boat    Benchy boat, by bob (4.20 EUR): Cults3D's API gives its files to its creator only; get it from Cults3D
                                              https://cults3d.com/en/3d-model/game/benchy-boat
 ```
 
@@ -116,7 +116,7 @@ make at <https://cults3d.com/en/api/keys>. A read-only key is enough; the plugin
 only reads.
 
 ```shell
-pc login //pub/universe/cults3d:cults3d_repo
+pc login //pub/collection/cults3d:cults3d_repo
 ```
 
 checks the nick and key it already has, and keeps them if Cults3D still takes
@@ -144,7 +144,7 @@ export CULTS3D_API_KEY=...
 ```yaml
 # ~/.partcad/config.yaml
 parameters:
-  "//pub/universe/cults3d:cults3d_repo":
+  "//pub/collection/cults3d:cults3d_repo":
     nick: "..."
     api_key: "..."
 ```
@@ -154,7 +154,7 @@ fetched from the address the API gives for it, with no credentials.
 
 **Without a key**, nothing is asked of Cults3D. A part, a file and a search each
 say `... needs a Cults3D account's nick and API key, and none was given: run 'pc
-login //pub/universe/cults3d:cults3d_repo' ...`. A key Cults3D no longer takes -
+login //pub/collection/cults3d:cults3d_repo' ...`. A key Cults3D no longer takes -
 deleted, say - is the same, with the API's `HTTP 401`. PartCAD keeps none of
 those answers on disk, but a PartCAD daemon that is already running remembers
 them, without asking the plugin again, for as long as it runs: if a creation is
@@ -202,7 +202,7 @@ credentials included, and the OAuth or API-key settings beside them:
 
   ```yaml
   parameters:
-    "//pub/universe/cults3d:cults3d_repo":
+    "//pub/collection/cults3d:cults3d_repo":
       formats: stl,3mf
   ```
 
@@ -214,7 +214,7 @@ credentials included, and the OAuth or API-key settings beside them:
   repositories:
     meshes_repo:
       type: enrich
-      source: //pub/universe/cults3d:cults3d_repo
+      source: //pub/collection/cults3d:cults3d_repo
       with:
         formats: stl,3mf
   dependencies:
@@ -230,7 +230,7 @@ name (`<slug>;format=stl`), or in the `with` of an enrich of the part:
 parts:
   clip:
     type: enrich
-    source: //pub/universe/cults3d/models:<slug>
+    source: //pub/collection/cults3d/models:<slug>
     with:
       format: stl
 ```
@@ -245,8 +245,8 @@ refreshes what was cached without it.
 An AI agent, or a script, logs in without a browser:
 
 ```shell
-pc login --agent //pub/universe/cults3d:cults3d_repo
-pc login --agent --set nick=... --set api_key=... //pub/universe/cults3d:cults3d_repo
+pc login --agent //pub/collection/cults3d:cults3d_repo
+pc login --agent --set nick=... --set api_key=... //pub/collection/cults3d:cults3d_repo
 ```
 
 The first prints what a person would do in the browser instead of opening one -
@@ -274,8 +274,8 @@ Run live:
   challenge`). So neither the documentation nor the key page's markup could be
   read from here; what the documentation says was read in search engines'
   excerpts of it, and the key is pasted rather than read off the page.
-- **PartCAD, without a key.** `pc info //pub/universe/cults3d/models:<slug>` and
-  `pc search parts -P //pub/universe/cults3d/models -k "cable clip"` both print
+- **PartCAD, without a key.** `pc info //pub/collection/cults3d/models:<slug>` and
+  `pc search parts -P //pub/collection/cults3d/models -k "cable clip"` both print
   the plugin's `pc login` message (the search then finds `<none>`), and `pc list
   parts` is empty. Asked again of the same daemon, `pc info` says "not found"
   without asking the plugin: the daemon remembers the first answer. PartCAD lists a hit with a `desc`, a `url` and no `type` as a
@@ -313,7 +313,7 @@ and key pasted into the bar, were not seen live, for want of an account.
 
 | Path | Purpose |
 | --- | --- |
-| `partcad.yaml` | `//pub/universe/cults3d`; the `models` external dependency and the `cults3d_repo` repository that serves it. |
+| `partcad.yaml` | `//pub/collection/cults3d`; the `models` external dependency and the `cults3d_repo` repository that serves it. |
 | `cults3d_repo.py` | The repository plugin: how Cults3D is asked, and how it is logged in to. |
 | `remote_models.py` | What every model-site plugin shares, byte for byte: the names, the formats, HTTP and its cache, the keys PartCAD asks, the login. The same file is in partcad-repo-thingiverse, partcad-repo-makerworld, partcad-repo-grabcad, partcad-repo-printables and partcad-repo-cults3d; `remote_models.sha256` is its digest, and a test fails when the two disagree - change it in all five. |
 | `test_*.py` | The tests. Nothing in them touches the network. |
