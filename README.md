@@ -315,7 +315,7 @@ and key pasted into the bar, were not seen live, for want of an account.
 | --- | --- |
 | `partcad.yaml` | `//pub/universe/cults3d`; the `models` external dependency and the `cults3d_repo` repository that serves it. |
 | `cults3d_repo.py` | The repository plugin: how Cults3D is asked, and how it is logged in to. |
-| `remote_models.py` | What every model-site plugin shares, byte for byte: the names, the formats, HTTP and its cache, the keys PartCAD asks, the login. The same file is in partcad-repo-thingiverse, partcad-repo-makerworld, partcad-repo-grabcad, partcad-repo-printables and partcad-repo-cults3d; `remote_models.sha256` is its digest, and a test fails when the two disagree - change it in all five. |
+| `remote_models.py` | What every model-site plugin shares, byte for byte: the names, the formats, HTTP and its cache, the keys PartCAD asks, the login. The same file is in every model-site plugin (partcad-repo-thingiverse, -makerworld, -grabcad, -printables, -cults3d and -sketchfab); `remote_models.sha256` is its digest, and a test fails when the two disagree - change it in all of them. |
 | `test_*.py` | The tests. Nothing in them touches the network. |
 
 ```shell
