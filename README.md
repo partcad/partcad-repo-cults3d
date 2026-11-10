@@ -164,6 +164,12 @@ parameters:
     api_key: "..."
 ```
 
+`nick`, `api_key` are the package's, not only the plugin's: each says `shared: true`. With
+PartCAD 0.10.4 or later, `pc login` keeps them under the package,
+`"//pub/collection/cults3d":`, where an entry gives them to every object of the
+package; an entry for the plugin, as above, still works, and wins over the
+package's. An older PartCAD reads the plugin's entry only.
+
 The pair is sent to `cults3d.com/graphql`, and to nothing else: a file is
 fetched from the address the API gives for it, with no credentials.
 

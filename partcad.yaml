@@ -119,6 +119,7 @@ repositories:
           back with '--set nick=... --set api_key=...'. CULTS3D_NICK gives it
           too, where the plugin's sandbox sees the environment (a container
           does not).
+        shared: true
       api_key:
         type: string
         default: ""
@@ -127,3 +128,4 @@ repositories:
           (a read-only one is enough), kept as 'nick' is; CULTS3D_API_KEY gives
           it too. The API hands over the files of the account's own creations
           only. Never set it in a package.
+        shared: true
