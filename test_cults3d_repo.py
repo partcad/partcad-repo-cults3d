@@ -30,7 +30,7 @@ _SPEC.loader.exec_module(plugin)
 rm = plugin.rm
 
 API = "https://cults3d.com/graphql"
-LOGIN = "pc login //pub/universe/cults3d:cults3d_repo"
+LOGIN = "pc login //pub/collection/cults3d:cults3d_repo"
 NICK = "ann"
 KEY = "k3yK3yk3yK3yk3yK3yk3yK3y"
 CDN = "https://files.cults3d.com/uploaders/1/blueprint-file-en/"
@@ -413,12 +413,3 @@ def test_partcad_runs_it_for_a_login(monkeypatch, tmp_path):
     assert callback.calls[0]["url"] == "https://cults3d.com/en/api/keys"
     with pytest.raises(RuntimeError, match="upgrade PartCAD"):
         runpy.run_path(_PLUGIN, init_globals={"request": request}, run_name="login")
-
-
-def test_the_shared_module_is_the_one_every_model_site_plugin_has():
-    import hashlib
-
-    with open(os.path.join(_HERE, "remote_models.py"), "rb") as f:
-        digest = hashlib.sha256(f.read()).hexdigest()
-    with open(os.path.join(_HERE, "remote_models.sha256")) as f:
-        assert digest == f.read().split()[0], "remote_models.py differs from the shared copy: update all five"

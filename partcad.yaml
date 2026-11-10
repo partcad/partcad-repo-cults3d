@@ -1,25 +1,26 @@
 # PartCAD package: Cults3D creations as parts, served by a repository plugin.
 #
-# Published as //pub/universe/cults3d/models: this package is
-# //pub/universe/cults3d, and its one external dependency 'models' is served by
+# Published as //pub/collection/cults3d/models: this package is
+# //pub/collection/cults3d, and its one external dependency 'models' is served by
 # the cults3d_repo plugin. Nothing is listed - a model site's catalog is not
 # something to enumerate - so a part is asked for by name, and found with
 # 'pc search parts' (see the README).
-name: //pub/universe/cults3d
+name: //pub/collection/cults3d
 
 desc: |
   Creations on Cults3D (https://cults3d.com) as PartCAD parts, by the
   creation's slug. Cults3D's API gives a creation's files to its creator only,
   so your own creations are parts, a part per file, and everyone else's are
   found by 'pc search parts' with where to get them. Every question needs your
-  Cults3D nick and an API key: 'pc login //pub/universe/cults3d:cults3d_repo'.
+  Cults3D nick and an API key: 'pc login //pub/collection/cults3d:cults3d_repo'.
   No geometry is vendored; every file is fetched from Cults3D when it is first
   built.
 url: https://cults3d.com/
 
-# The first PartCAD with 'pc login', which is how the plugin is given the nick
-# and API key every one of its questions to Cults3D needs.
-partcad: ">=0.9.3"
+# The first PartCAD that has the toolkit this plugin is written with
+# (plugin_models), and hands a repository plugin the key it is asked for
+# taken apart ('query').
+partcad: ">=0.9.20"
 
 # An upload to a model site says nothing about whether, or how, it is made to
 # be manufactured. The plugin says the same of 'models' in its metadata.
@@ -29,10 +30,10 @@ docs:
   name: Cults3D for PartCAD
   usage: |
     ```shell
-    pc login //pub/universe/cults3d:cults3d_repo
-    pc search parts -P //pub/universe/cults3d/models -k "cable clip"
-    pc inspect //pub/universe/cults3d/models:<your creation's slug>
-    pc inspect "//pub/universe/cults3d/models:<your creation's slug>;format=stl"
+    pc login //pub/collection/cults3d:cults3d_repo
+    pc search parts -P //pub/collection/cults3d/models -k "cable clip"
+    pc inspect //pub/collection/cults3d/models:<your creation's slug>
+    pc inspect "//pub/collection/cults3d/models:<your creation's slug>;format=stl"
     ```
 
 dependencies:
@@ -53,7 +54,7 @@ repositories:
     #   plugin's name - which is also where 'pc login' keeps these two:
     #
     #     parameters:
-    #       //pub/universe/cults3d:cults3d_repo:
+    #       //pub/collection/cults3d:cults3d_repo:
     #         formats: stl,3mf
     #
     # - or in a package of your own, as an enrich of the plugin and a package
@@ -64,7 +65,7 @@ repositories:
     #     repositories:
     #       meshes_repo:
     #         type: enrich
-    #         source: //pub/universe/cults3d:cults3d_repo
+    #         source: //pub/collection/cults3d:cults3d_repo
     #         with:
     #           formats: stl,3mf
     #     dependencies:
@@ -74,14 +75,14 @@ repositories:
     #
     # A part's own parameters override these for that part. Every part takes
     # 'file' (one of the creation's files, by name ('<name>#2' for the second
-    # of that name)), 'format' (its best file of that format: step, brep, 3mf,
-    # stl, obj, glb or scad) and 'source' (as below) - in its name, '<your
+    # of that name)), 'format' (its best file of that format: one of the
+    # 'formats' below) and 'source' (as below) - in its name, '<your
     # creation's slug>;format=stl', or in the 'with' of an enrich of the part:
     #
     #     parts:
     #       clip:
     #         type: enrich
-    #         source: //pub/universe/cults3d/models:<your creation's slug>
+    #         source: //pub/collection/cults3d/models:<your creation's slug>
     #         with:
     #           format: stl
     parameters:
@@ -90,7 +91,9 @@ repositories:
         default: ""
         desc: >-
           The formats to take a creation in, best first, separated by commas:
-          step, brep, 3mf, stl, obj, glb, scad. A format left out is not taken
+          step, brep, iges, 3mf, stl, obj, glb, usd, sldprt, ipt,
+          catpart, f3d, fcstd, sat, pvz, scad. A format left out is
+          not taken
           - 'stl,3mf' is meshes only - unless a part asks for it by its own
           'format' or 'file'. Empty is all of them, in that order.
       source:
@@ -110,7 +113,7 @@ repositories:
           The nick of your Cults3D account - the name your profile is under,
           not your e-mail address. Cults3D's API signs in with it and an API
           key, the only way it has. 'pc login
-          //pub/universe/cults3d:cults3d_repo' asks for both, checks them, and
+          //pub/collection/cults3d:cults3d_repo' asks for both, checks them, and
           keeps them in your ~/.partcad/config.yaml, under 'parameters' as
           above; 'pc login --agent' says where to find them, and takes them
           back with '--set nick=... --set api_key=...'. CULTS3D_NICK gives it
